@@ -1,0 +1,98 @@
+<html>
+    <head>
+    </head>
+    <body>
+        <form class="survey-panel" method='POST' name="entry" autocomplete="off" onsubmit="return validateForm()">{% csrf_token %}
+            {% for question in questions %}
+            <div class="question-panel">
+                <label><b>{{ forloop.counter }}. {{ question.question }}</b></label>
+                <div class="choices-panel">
+                    {% for choice in choices %}
+                    <input type="radio" name="{{ question.val }}" value="{{ choice.val }}" id="{{ question.val }}{{ choice.id }}">
+                    <label class='toggle-button' for="{{ question.val }}{{ choice.id }}" name="{{ question.val }}">{{ choice.choice }}</label>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+            <div class="submit-panel">
+                <input type="submit" value="SUBMIT">
+            </div>
+        </form>
+    </body>
+</html>
+
+<script>
+    function validateForm() {
+        var questions = document.getElementsByClassName("question-panel");
+        for (var i = 0; i < questions.length; i++) {
+            var radios = questions [i].querySelectorAll("input[type='radio']");
+            var checked = false;
+            for (var j = 0; j < radios.length; j++) {
+            if (radios [j].checked) {
+                checked = true;
+                break;
+            }
+            }
+            if (!checked) {
+            alert("Please select an option for question " + (i + 1));
+            return false;
+            }
+        }
+        return true;
+    }
+</script>
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 30px;
+    }
+    input[type="radio"] {
+        display: none;
+    }
+
+    .survey-panel {
+        display: grid;
+        gap: 30px;
+    }
+
+    .question-panel {
+        display: grid;
+        gap: 10px;
+        border-top: 5px solid #0c5977;
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        padding: 20px 30px 10px 30px;
+        border-radius: 5px;
+    }
+
+    .choices-panel {
+        display: flex;
+        justify-content: center;
+        padding: 10px;
+        gap: 70px;
+    }
+    .toggle-button {
+        border: 3px solid #aaa;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+    .toggle-button:hover {
+        background-color: #90dfff78
+    }
+    input[type="radio"]:checked + .toggle-button {
+        background-color: #0c5977;
+        color: white;
+    }
+
+    input[type="submit"] {
+        background-color: #0c5977;
+        padding: 15px 30px;
+        color: white;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+    input[type="submit"]:hover {
+        background-color: #002837;
+    }
+</style>
